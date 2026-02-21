@@ -1,6 +1,7 @@
 import express from 'express';
 import connectDb from './config/DB.js';
 import kioskRoutes from './routes/Kiosk.routes.js';
+import buildingRoutes from './routes/Building.routes.js';
 
 const app = express();
 connectDb();
@@ -11,5 +12,6 @@ app.get('/api', (req, res) => {
   res.send('Hello World');
 });
 app.use('/api/kiosk',kioskRoutes)
+app.use('/api/building',buildingRoutes)
 
 export default app;
