@@ -23,7 +23,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 800,
         height: 600,
-        kiosk: false, // Full screen kiosk mode, set true in production
+        kiosk: true, // Full screen kiosk mode, set true in production
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -31,6 +31,8 @@ function createWindow() {
             contextIsolation: false,
         },
     })
+
+    // win.setMenu(null)
 
     // Test active push message to Renderer-process.
     win.webContents.on('did-finish-load', () => {
