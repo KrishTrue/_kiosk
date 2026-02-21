@@ -2,27 +2,34 @@ import mongoose from 'mongoose';
 
 const BuildingSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },        
-    code: { type: String, unique: true, uppercase: true },     
+    name: { type: String, required: true, trim: true },
+    code: { type: String, unique: true, uppercase: true },
     type: {
       type: String,
-      enum: ['block', 'library', 'canteen', 'hostel', 'admin', 'lab', 'auditorium', 'medical', 'other'],
-      required: true
+      enum: [
+        'block',
+        'library',
+        'canteen',
+        'hostel',
+        'admin',
+        'lab',
+        'auditorium',
+        'medical',
+        'other',
+      ],
+      required: true,
     },
-    description: { type: String },                             
-
+    description: { type: String },
 
     coordinates: {
-      x: { type: Number, required: true },                     
-      y: { type: Number, required: true }                      
+      x: { type: Number, required: true },
+      y: { type: Number, required: true },
     },
 
-
     totalFloors: { type: Number, default: 1 },
-    isAccessible: { type: Boolean, default: true },            
+    isAccessible: { type: Boolean, default: true },
     hasLift: { type: Boolean, default: false },
 
-    
     rooms: [
       {
         roomNumber: { type: String },
@@ -30,46 +37,40 @@ const BuildingSchema = new mongoose.Schema(
         floor: { type: Number, default: 0 },
         type: {
           type: String,
-          enum: ['classroom', 'lab', 'office', 'washroom', 'staircase', 'other']
+          enum: ['classroom', 'lab', 'office', 'washroom', 'staircase', 'other'],
         },
         coordinates: {
           x: { type: Number },
-          y: { type: Number }
-        }
-      }
+          y: { type: Number },
+        },
+      },
     ],
-
 
     departments: [{ type: String }],
 
-
-    openTime: { type: String, default: '09:00' },            
-    closeTime: { type: String, default: '16:00' },             
+    openTime: { type: String, default: '09:00' },
+    closeTime: { type: String, default: '16:00' },
     isOpenWeekends: { type: Boolean, default: false },
-
 
     contactNumber: { type: String },
     contactEmail: { type: String },
 
-
     isActive: { type: Boolean, default: true },
     isUnderMaintenance: { type: Boolean, default: false },
 
-
-   imageUrl: {
-    type:[String]
-   }
+    imageUrl: {
+      type: [String],
+    },
   },
   {
-    timestamps: true                                          
+    timestamps: true,
   }
 );
 
 const Building = mongoose.model('Building', BuildingSchema);
 export default Building;
 
-
-//input example 
+//input example
 // {
 //   "name": "Central Library",
 //   "code": "LIB",

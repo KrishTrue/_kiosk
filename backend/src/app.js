@@ -11,7 +11,7 @@ app.use(express.json());
 app.get('/api', (req, res) => {
   res.send('Hello World');
 });
-app.use('/api/kiosk',kioskRoutes)
-app.use('/api/building',buildingRoutes)
+app.use('/api/kiosk', kioskRoutes);
+app.use('/api/building', buildingRoutes);
 
 export default app;
