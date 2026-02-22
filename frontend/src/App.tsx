@@ -5,6 +5,7 @@ import SidePanel from './components/SidePannel'
 import Navigation from './pages/Navigation'
 import HelpDesk from './pages/HelpDesk'
 import Announcements from './pages/Announcements'
+import AnnouncementDetail from './pages/AnnouncementDetail'
 import Schedule from './pages/Schedule'
 import Faculty from './pages/Faculty'
 import Rooms from './pages/Rooms'
@@ -23,15 +24,18 @@ const App = () => {
           <SidePanel />
         </div>
 
-        <div className="ml-[430px] flex-1 overflow-y-auto p-6">
+      <div className="fixed top-36 left-[430px] right-0 bottom-20 pr-6 z-30">
+          <div className="h-full w-full">
           <Routes>
             <Route path="/" element={<Navigation />} />
             <Route path="/announcements" element={<Announcements />} />
+            <Route path="/announcement/:id" element={<AnnouncementDetail />} />
             <Route path='/help' element={<HelpDesk />} />
             <Route path='/schedule' element={<Schedule />} />
             <Route path='/faculty' element={<Faculty />} />
             <Route path='/rooms' element={<Rooms />} />
           </Routes>
+          </div>
         </div>
 
       </div>
