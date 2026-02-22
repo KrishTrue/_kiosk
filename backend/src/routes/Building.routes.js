@@ -1,5 +1,9 @@
 import express from 'express';
-import { addBuilding, getAllBuildings, getBuildingById } from '../controller/Building.controller.js';
+import {
+  addBuilding,
+  getAllBuildings,
+  getBuildingById,
+} from '../controller/Building.controller.js';
 
 const router = express.Router();
 

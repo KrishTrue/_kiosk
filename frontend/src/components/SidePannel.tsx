@@ -8,7 +8,7 @@ import {
   DoorOpen,
   Bell,
   MessageSquare,
-  ChevronRight
+  ChevronRight,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,6 @@ const SidePanel = () => {
 
   return (
     <div className="w-full h-full bg-white/90 backdrop-blur-md border border-gray-200 p-8 flex flex-col gap-8 select-none rounded-2xl shadow-xl overflow-y-auto">
-
       <div>
         <h2 className="text-gray-400 font-bold tracking-widest text-sm mb-4">
           {t('sidebar.title')}
@@ -52,7 +51,10 @@ const SidePanel = () => {
           return (
             <button
               key={item.key}
-              onClick={() => { setActiveTab(item.key); navigate(item.route); }}
+              onClick={() => {
+                setActiveTab(item.key);
+                navigate(item.route);
+              }}
               className={`flex items-center gap-4 px-6 py-5 rounded-3xl transition-all active:scale-95 duration-200 ${
                 isActive
                   ? `${item.color ?? 'bg-blue-600'} text-white shadow-lg shadow-green-900/10`

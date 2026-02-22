@@ -42,11 +42,13 @@ const Navbar = () => {
 
   const formatDate = (date: Date) => {
     const day = date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-    const rest = date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: '2-digit',
-      year: 'numeric',
-    }).toUpperCase();
+    const rest = date
+      .toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric',
+      })
+      .toUpperCase();
     return { day, rest };
   };
 
@@ -55,7 +57,6 @@ const Navbar = () => {
 
   return (
     <nav className="w-full h-32 bg-gradient-to-r from-[#001f3f] via-[#003366] to-[#001a33] px-10 flex items-center justify-between text-white shadow-2xl border-b border-white/10 select-none z-50">
-
       {/* Logo */}
       <div className="flex items-center gap-4 group cursor-pointer active:scale-95 transition-transform">
         <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/20">
@@ -63,7 +64,8 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col justify-center">
           <h1 className="text-3xl font-bold tracking-tight leading-none">
-            {t('navbar.titleBold')} <span className="font-light opacity-90">{t('navbar.titleLight')}</span>
+            {t('navbar.titleBold')}{' '}
+            <span className="font-light opacity-90">{t('navbar.titleLight')}</span>
           </h1>
           <p className="text-[10px] tracking-[0.2em] opacity-50 font-bold uppercase mt-1">
             {t('navbar.ecosystem')}
