@@ -1,0 +1,32 @@
+{
+  "navbar": {
+    "titleBold": "Smart",
+    "titleLight": "Campus",
+    "ecosystem": "BFGI Ecosystem",
+    "language": "ENGLISH"
+  },
+  "sidebar": {
+    "title": "SIDEBAR PANEL",
+    "search": "Search for room, faculty, or service",
+    "navigate": "Navigate",
+    "schedule": "Schedule",
+    "library": "Library",
+    "faculty": "Faculty",
+    "rooms": "Rooms",
+    "announcements": "Announcements",
+    "maintenance": "Upcoming network maintenance: Fri at 5 PM",
+    "help": "HELP",
+    "contactSupport": "Contact Support"
+  },
+  "footer": {
+    "text": "Touch the screen anywhere to interact • For immediate assistance, please visit the reception desk"
+  },
+  "pages": {
+    "navigation": "Navigation Content Area",
+    "announcements": "Announcements Content Area",
+    "helpDesk": "Help Desk Content Area",
+    "schedule": "Schedule Content Area",
+    "faculty": "Faculty Content Area",
+    "rooms": "Rooms Content Area"
+  }
+}

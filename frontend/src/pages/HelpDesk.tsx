@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 const HelpDesk = () => {
+  const { t } = useTranslation();
   return (
     <div className="h-full w-full bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
-      <p className="text-2xl text-gray-400 font-medium">Help Desk Content Area</p>
+      <p className="text-2xl text-gray-400 font-medium">{t('pages.helpDesk')}</p>
     </div>
-  )
-}
+  );
+};
 
-export default HelpDesk
+export default HelpDesk;

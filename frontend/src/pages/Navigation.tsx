@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 const Navigation = () => {
+  const { t } = useTranslation();
   return (
     <div className="h-full w-full bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
-      <p className="text-2xl text-gray-400 font-medium">Navigation Content Area</p>
+      <p className="text-2xl text-gray-400 font-medium">{t('pages.navigation')}</p>
     </div>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;
