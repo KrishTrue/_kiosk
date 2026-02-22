@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Globe, HelpCircle, GraduationCap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Globe, GraduationCap } from 'lucide-react';
 
 const Navbar = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -33,7 +33,7 @@ const Navbar = () => {
   const { day, rest } = formatDate(currentTime);
 
   return (
-    <nav className="w-full h-28 bg-gradient-to-r from-[#001f3f] via-[#003366] to-[#001a33] px-10 flex items-center justify-between text-white shadow-2xl border-b border-white/10 select-none">
+    <nav className="w-full h-32 bg-gradient-to-r from-[#001f3f] via-[#003366] to-[#001a33] px-10 flex items-center justify-between text-white shadow-2xl border-b border-white/10 select-none z-50">
       
       <div className="flex items-center gap-4 group cursor-pointer active:scale-95 transition-transform">
         <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/20">
