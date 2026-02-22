@@ -10,17 +10,19 @@ import {
   MessageSquare,
   ChevronRight
 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const SidePanel = () => {
   const [activeTab, setActiveTab] = useState('Navigate');
+  const navigate=useNavigate()
 
   const navItems = [
-    { name: 'Navigate', icon: Navigation, color: 'bg-[#8dc63f]' },
-    { name: 'Schedule', icon: Calendar },
-    { name: 'Library', icon: Library },
-    { name: 'Faculty', icon: Users },
-    { name: 'Rooms', icon: DoorOpen },
+    { name: 'Navigate', icon: Navigation, color: 'bg-[#8dc63f]', route: '/' },
+    { name: 'Schedule', icon: Calendar, route: '/schedule' },
+    { name: 'Library', icon: Library, route: '/library' },
+    { name: 'Faculty', icon: Users, route: '/faculty' },
+    { name: 'Rooms', icon: DoorOpen, route: '/rooms' },
   ];
 
   return (
@@ -45,7 +47,7 @@ const SidePanel = () => {
           return (
             <button
               key={item.name}
-              onClick={() => setActiveTab(item.name)}
+              onClick={() => {setActiveTab(item.name); navigate(item.route)}}
               className={`flex items-center gap-4 px-6 py-5 rounded-3xl transition-all active:scale-95 duration-200 ${
                 isActive 
                   ? `${item.color || 'bg-blue-600'} text-white shadow-lg shadow-green-900/10` 
@@ -61,10 +63,12 @@ const SidePanel = () => {
       </div>
 
       <div className="mt-auto">
+        <Link to='/announcements'>
         <button className="w-full bg-white border border-gray-200 py-6 rounded-3xl flex items-center justify-center gap-3 text-gray-700 font-bold shadow-sm active:bg-gray-50 transition-colors">
           <Bell size={20} className="text-gray-400" />
           Announcements
         </button>
+        </Link>
         <p className="text-[11px] text-gray-400 mt-4 px-2 leading-relaxed text-center">
           Upcoming network maintenance: Fri at 5 PM
         </p>
@@ -72,10 +76,12 @@ const SidePanel = () => {
 
       <div className="pt-6 border-t border-gray-200">
         <h2 className="text-gray-400 font-bold tracking-widest text-sm mb-4 uppercase">Help</h2>
+        <Link to='/help'>
         <button className="w-full bg-white border border-gray-200 py-4 rounded-full flex items-center justify-center gap-3 text-gray-700 font-bold shadow-md active:bg-gray-100 transition-all">
           <MessageSquare size={18} className="text-blue-500" />
           Contact Support
         </button>
+        </Link>
       </div>
     </div>
   );

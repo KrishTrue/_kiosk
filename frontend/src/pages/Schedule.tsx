@@ -1,0 +1,9 @@
+const Schedule = () => {
+  return (
+     <div className="h-full w-full bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
+        <p className="text-2xl text-gray-400 font-medium">Schedule Content Area</p>
+    </div>
+  )
+}
+
+export default Schedule

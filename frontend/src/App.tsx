@@ -1,7 +1,13 @@
+import { Route, Routes } from 'react-router-dom'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import SidePanel from './components/SidePannel'
 import Navigation from './pages/Navigation'
+import HelpDesk from './pages/HelpDesk'
+import Announcements from './pages/Announcements'
+import Schedule from './pages/Schedule'
+import Faculty from './pages/Faculty'
+import Rooms from './pages/Rooms'
 
 const App = () => {
   return (
@@ -18,7 +24,14 @@ const App = () => {
         </div>
 
         <div className="ml-[430px] flex-1 overflow-y-auto p-6">
-          <Navigation />
+          <Routes>
+            <Route path="/" element={<Navigation />} />
+            <Route path="/announcements" element={<Announcements />} />
+            <Route path='/help' element={<HelpDesk />} />
+            <Route path='/schedule' element={<Schedule />} />
+            <Route path='/faculty' element={<Faculty />} />
+            <Route path='/rooms' element={<Rooms />} />
+          </Routes>
         </div>
 
       </div>
