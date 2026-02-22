@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Map, BookOpen, Bell, Calendar, Users, Info, Clock, ChevronRight } from 'lucide-react';
+import Navbar from './components/Navbar';
 
 const MENU_ITEMS = [
   {
@@ -62,26 +63,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen w-screen bg-gray-50 text-gray-900 overflow-hidden font-sans">
-      {/* Header */}
-      <header className="bg-white px-10 py-6 flex justify-between items-center shadow-sm z-10 border-b border-gray-200">
-        <div className="flex items-center gap-6">
-          <div className="bg-blue-600 p-3 rounded-2xl shadow-lg shadow-blue-600/30">
-            <Map className="w-10 h-10 text-white" />
-          </div>
-          <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-              University Kiosk
-            </h1>
-            <p className="text-gray-500 text-xl font-medium mt-1">
-              Welcome to the campus information center
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 text-3xl font-bold text-gray-700 bg-gray-100 px-8 py-4 rounded-2xl border border-gray-200">
-          <Clock className="w-8 h-8 text-blue-600" />
-          {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-        </div>
-      </header>
+      <Navbar/>
 
       {/* Main Content */}
       <main className="flex-1 relative flex flex-col items-center justify-center p-10">
