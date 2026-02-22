@@ -2,8 +2,8 @@ import Kiosk from '../models/kiosk.model.js';
 
 export const registerKiosk = async (req, res) => {
   try {
-    const { name, latitude, longitude } = req.body;
-    if (!name || !latitude || !longitude) {
+    const { name, coordinates } = req.body;
+    if (!name || !coordinates || !coordinates.x || !coordinates.y) {
       return res.status(400).json({ message: 'All fields are required' });
     }
     const existingKiosk = await Kiosk.findOne({ name });
@@ -12,9 +12,9 @@ export const registerKiosk = async (req, res) => {
     }
     const kiosk = new Kiosk({
       name,
-      location: {
-        latitude,
-        longitude,
+      coordinates: {
+        x: coordinates.x,
+        y: coordinates.y,
       },
     });
     await kiosk.save();

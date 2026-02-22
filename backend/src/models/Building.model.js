@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const BuildingSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    code: { type: String, unique: true, uppercase: true },
+    code:{ type: String, uppercase: true, trim: true },
     type: {
       type: String,
       enum: [
@@ -26,7 +26,7 @@ const BuildingSchema = new mongoose.Schema(
       y: { type: Number, required: true },
     },
 
-    totalFloors: { type: Number, default: 1 },
+    totalFloors: { type: Number, default: 2 },
     isAccessible: { type: Boolean, default: true },
     hasLift: { type: Boolean, default: false },
 

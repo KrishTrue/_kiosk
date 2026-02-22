@@ -7,12 +7,12 @@ const kioskSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    location: {
-      latitude: {
+    coordinates: {
+      x: {
         type: Number,
         required: true,
       },
-      longitude: {
+      y: {
         type: Number,
         required: true,
       },
