@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bell, Clock, RefreshCw, ChevronRight, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface Announcement {
   _id: string;
@@ -35,12 +36,15 @@ const Announcements = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const fetchAnnouncements = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('/api/announcement/all');
+      const response = await axios.get('/api/announcement/all', {
+        params: { lang: i18n.language },
+      });
       setAnnouncements(response.data.announcements || []);
     } catch (err) {
       console.error('Kiosk Announcements Fetch Error:', err);
@@ -50,11 +54,12 @@ const Announcements = () => {
     }
   };
 
+  // Re-fetch whenever the active language changes
   useEffect(() => {
     fetchAnnouncements();
     const autoRefresh = setInterval(fetchAnnouncements, 300000);
     return () => clearInterval(autoRefresh);
-  }, []);
+  }, [i18n.language]);
 
   return (
     <div className="flex flex-col h-full bg-[#f8fafc] rounded-[50px] shadow-xl overflow-hidden border border-white/40 font-sans">

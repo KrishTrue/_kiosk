@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, Clock, Calendar, Megaphone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Announcement {
   _id: string;
@@ -16,15 +17,18 @@ const AnnouncementDetail = () => {
   const [data, setData] = useState<Announcement | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
+    setError(null);
     axios
-      .get(`/api/announcement/${id}`)
+      .get(`/api/announcement/${id}`, { params: { lang: i18n.language } })
       .then((res) => setData(res.data.announcement))
       .catch(() => setError('Could not load this announcement.'))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, i18n.language]); // re-fetch when language changes
 
   if (loading)
     return (
