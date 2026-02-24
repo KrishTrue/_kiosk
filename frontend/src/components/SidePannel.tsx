@@ -8,10 +8,9 @@ import {
   Bell,
   MessageSquare,
   ChevronRight,
-  Building
+  Building,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-
 
 const SidePanel = () => {
   const navItems = [
@@ -23,19 +22,18 @@ const SidePanel = () => {
     { key: 'rooms', label: 'Rooms', icon: DoorOpen, route: '/rooms' },
   ];
 
- 
   const getNavLinkClass = (isActive: boolean, activeColor?: string) => {
-    const baseClasses = "flex items-center gap-5 px-8 py-6 rounded-[32px] transition-all active:scale-95 duration-200 border shadow-sm";
-    const activeClasses = isActive 
-      ? `${activeColor ?? 'bg-blue-600'} text-white shadow-lg border-transparent` 
-      : "bg-white text-slate-600 hover:bg-slate-50 border-slate-100";
-    
+    const baseClasses =
+      'flex items-center gap-5 px-8 py-6 rounded-[32px] transition-all active:scale-95 duration-200 border shadow-sm';
+    const activeClasses = isActive
+      ? `${activeColor ?? 'bg-blue-600'} text-white shadow-lg border-transparent`
+      : 'bg-white text-slate-600 hover:bg-slate-50 border-slate-100';
+
     return `${baseClasses} ${activeClasses}`;
   };
 
   return (
     <div className="w-full h-full bg-white/95 backdrop-blur-xl border-r border-slate-200 p-10 flex flex-col gap-10 select-none rounded-r-[40px] shadow-2xl overflow-y-auto custom-scrollbar">
-      
       <div className="shrink-0">
         <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">
           Sidebar Panel
@@ -63,10 +61,13 @@ const SidePanel = () => {
             {({ isActive }) => (
               <>
                 <item.icon size={28} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-xl font-bold tracking-tight">
-                  {item.label}
-                </span>
-                {isActive && <ChevronRight size={24} className="ml-auto opacity-60 animate-in slide-in-from-left-2 duration-300" />}
+                <span className="text-xl font-bold tracking-tight">{item.label}</span>
+                {isActive && (
+                  <ChevronRight
+                    size={24}
+                    className="ml-auto opacity-60 animate-in slide-in-from-left-2 duration-300"
+                  />
+                )}
               </>
             )}
           </NavLink>
@@ -77,10 +78,8 @@ const SidePanel = () => {
         <NavLink to="/announcements">
           {({ isActive }) => (
             <div className={getNavLinkClass(isActive, 'bg-[#002b5c]')}>
-              <Bell size={24} className={isActive ? "text-white" : "text-slate-400"} />
-              <span className="text-xl font-bold">
-                Announcements
-              </span>
+              <Bell size={24} className={isActive ? 'text-white' : 'text-slate-400'} />
+              <span className="text-xl font-bold">Announcements</span>
               {isActive && <ChevronRight size={24} className="ml-auto opacity-60" />}
             </div>
           )}
@@ -91,16 +90,12 @@ const SidePanel = () => {
       </div>
 
       <div className="pt-8">
-        <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">
-          Help
-        </h2>
+        <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">Help</h2>
         <NavLink to="/help">
           {({ isActive }) => (
             <div className={getNavLinkClass(isActive, 'bg-slate-800')}>
-              <MessageSquare size={22} className={isActive ? "text-white" : "text-blue-500"} />
-              <span className="text-xl font-bold">
-                Contact Support
-              </span>
+              <MessageSquare size={22} className={isActive ? 'text-white' : 'text-blue-500'} />
+              <span className="text-xl font-bold">Contact Support</span>
               {isActive && <ChevronRight size={24} className="ml-auto opacity-60" />}
             </div>
           )}

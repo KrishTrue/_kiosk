@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const multiLangField = (required = false) => ({
   en: { type: String, required, trim: true, default: '' },
   hi: { type: String, trim: true, default: '' },

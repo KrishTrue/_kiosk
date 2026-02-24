@@ -1,4 +1,3 @@
-
 const MYMEMORY_URL = 'https://api.mymemory.translated.net/get';
 const MYMEMORY_EMAIL = process.env.MYMEMORY_EMAIL || '';
 

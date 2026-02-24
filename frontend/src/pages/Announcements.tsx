@@ -54,7 +54,6 @@ const Announcements = () => {
     }
   };
 
-
   useEffect(() => {
     fetchAnnouncements();
     const autoRefresh = setInterval(fetchAnnouncements, 300000);
