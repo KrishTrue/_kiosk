@@ -13,20 +13,22 @@ interface Announcement {
   __v: number;
 }
 
+
 const TimeAgo = ({ date }: { date: string }) => {
+  const { t, i18n } = useTranslation();
   const diff = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
 
   if (isNaN(diff)) return null;
   let text = '';
-  if (diff < 60) text = 'Just now';
-  else if (diff < 3600) text = `${Math.floor(diff / 60)}m ago`;
-  else if (diff < 86400) text = `${Math.floor(diff / 3600)}h ago`;
-  else text = new Date(date).toLocaleDateString();
+  if (diff < 60) text = t('announcements.justNow', 'Just now');
+  else if (diff < 3600) text = t('announcements.minutesAgo', { count: Math.floor(diff / 60), defaultValue: '{{count}}m ago' });
+  else if (diff < 86400) text = t('announcements.hoursAgo', { count: Math.floor(diff / 3600), defaultValue: '{{count}}h ago' });
+  else text = new Date(date).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' });
 
   return (
-    <div className="flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full border border-blue-100/50">
-      <Clock size={16} className="opacity-70" />
-      <span className="text-xs font-black uppercase tracking-widest">{text}</span>
+    <div className="flex items-center gap-2 bg-slate-50 text-slate-500 px-3 py-1 rounded-full border border-slate-200">
+      <Clock size={14} className="opacity-60" />
+      <span className="text-[10px] font-black uppercase tracking-widest">{text}</span>
     </div>
   );
 };
@@ -36,19 +38,17 @@ const Announcements = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const fetchAnnouncements = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('/api/announcement/all', {
-        params: { lang: i18n.language },
-      });
+      const response = await axios.get(`/api/announcement/all`, { params: { lang: i18n.language } });
       setAnnouncements(response.data.announcements || []);
     } catch (err) {
       console.error('Kiosk Announcements Fetch Error:', err);
-      setError('Unable to load latest notifications.');
+      setError(t('announcements.error', 'Unable to load latest notifications.'));
     } finally {
       setLoading(false);
     }
@@ -60,99 +60,96 @@ const Announcements = () => {
     return () => clearInterval(autoRefresh);
   }, [i18n.language]);
 
+
   return (
-    <div className="flex flex-col h-full bg-[#f8fafc] rounded-[50px] shadow-xl overflow-hidden border border-white/40 font-sans">
-      <div className="p-12 pb-10 border-b border-gray-200/50 flex justify-between items-end bg-gradient-to-b from-white to-transparent">
+    <div className="flex flex-col h-full bg-[#fcfdfe] rounded-[40px] shadow-2xl overflow-hidden border border-slate-100 font-sans relative">
+      <div className="p-10 pb-6 border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-md z-10">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-1 bg-blue-600 rounded-full" />
-            <span className="text-blue-600 font-black text-sm tracking-[0.3em] uppercase">
-              Campus Feed
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-8 h-1 bg-[#002b5c] rounded-full" />
+            <span className="text-[#002b5c] font-black text-[10px] tracking-[0.4em] uppercase opacity-60">
+              {t('announcements.campusUpdates', 'Campus Updates')}
             </span>
           </div>
-          <h2 className="text-5xl font-black text-[#002b5c] tracking-tight leading-none">
-            Latest Announcements
+          <h2 className="text-4xl font-black text-[#002b5c] tracking-tight">
+            {t('announcements.bulletins', 'Bulletins')}
           </h2>
-          <p className="text-gray-400 font-medium text-xl mt-3">
-            Important updates for students and visitors
-          </p>
         </div>
 
-        <button
-          onClick={fetchAnnouncements}
-          disabled={loading}
-          className="p-6 bg-white border-2 border-gray-100 rounded-[30px] text-[#002b5c] shadow-lg shadow-blue-900/5 active:scale-90 active:bg-blue-50 transition-all group flex items-center justify-center"
-        >
-          <RefreshCw
-            size={36}
-            className={`${loading ? 'animate-spin text-blue-500' : 'group-hover:rotate-180 transition-transform duration-700'}`}
-          />
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={fetchAnnouncements}
+            disabled={loading}
+            className="p-4 bg-white border border-slate-200 rounded-2xl text-[#002b5c] shadow-sm active:scale-90 active:bg-slate-50 transition-all group flex items-center justify-center"
+          >
+            <RefreshCw
+              size={24}
+              className={`${loading ? 'animate-spin text-blue-500' : 'group-hover:rotate-180 transition-transform duration-700'}`}
+            />
+          </button>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-12 py-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-10 py-6 custom-scrollbar bg-slate-50/20">
         {loading && announcements.length === 0 ? (
-          <div className="space-y-10 py-6">
-            {[1, 2, 3].map((i) => (
+          <div className="space-y-6 py-4">
+            {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="h-48 bg-white/60 rounded-[48px] animate-pulse border border-gray-100 relative overflow-hidden"
+                className="h-32 bg-white rounded-3xl animate-pulse border border-slate-100 relative overflow-hidden"
               >
-                <div className="absolute left-0 top-0 w-3 h-full bg-gray-100" />
+                <div className="absolute left-0 top-0 w-2 h-full bg-slate-100" />
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-20">
-            <div className="bg-red-50 p-12 rounded-full mb-8 shadow-inner">
-              <Info size={80} className="text-red-400" />
+          <div className="h-full flex flex-col items-center justify-center text-center p-12">
+            <div className="bg-red-50 p-8 rounded-full mb-6 border border-red-100">
+              <Info size={48} className="text-red-400" />
             </div>
-            <p className="text-3xl font-bold text-gray-400 mb-8">{error}</p>
+            <p className="text-xl font-bold text-slate-500 mb-8">{error}</p>
             <button
               onClick={fetchAnnouncements}
-              className="px-14 py-6 bg-[#002b5c] text-white rounded-[30px] font-black text-2xl shadow-2xl shadow-blue-900/20 active:scale-95 transition-all uppercase tracking-widest"
+              className="px-10 py-4 bg-[#002b5c] text-white rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all"
             >
-              Retry Connection
+              {t('announcements.retry', 'Retry')}
             </button>
           </div>
         ) : announcements.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center">
-            <div className="relative mb-10">
-              <div className="absolute inset-0 bg-blue-100 blur-3xl rounded-full opacity-30" />
-              <Bell size={160} strokeWidth={0.5} className="relative text-[#002b5c] opacity-10" />
-            </div>
-            <h3 className="text-4xl font-black text-[#002b5c] opacity-40">All Caught Up</h3>
-            <p className="text-2xl mt-4 text-gray-400 font-medium">
-              No new announcements at this time
-            </p>
+          <div className="h-full flex flex-col items-center justify-center text-center opacity-40 grayscale">
+            <Bell size={120} strokeWidth={0.5} className="text-[#002b5c] mb-6" />
+            <h3 className="text-3xl font-black text-[#002b5c]">{t('announcements.boardClear', 'Board Clear')}</h3>
+            <p className="text-lg mt-2 font-medium">{t('announcements.noNew', 'No new announcements at this time')}</p>
           </div>
         ) : (
-          <div className="space-y-10 py-6">
+          <div className="space-y-6 pb-12">
             {announcements.map((item) => (
               <div
                 key={item._id}
                 onClick={() => navigate(`/announcement/${item._id}`)}
-                className="group relative w-full bg-white p-12 rounded-[56px] flex items-center gap-10 shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-white hover:border-blue-200 hover:shadow-[0_20px_60px_-10px_rgba(0,43,92,0.1)] transition-all duration-500 active:scale-[0.97] cursor-pointer"
+                className="group relative w-full bg-white p-8 rounded-[32px] flex items-center gap-8 shadow-sm border border-slate-100 hover:border-[#002b5c]/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98] cursor-pointer"
               >
-                <div className="absolute left-0 top-12 bottom-12 w-2.5 rounded-r-full bg-[#002b5c] group-hover:bg-blue-600 transition-colors" />
+                <div className="absolute left-0 top-8 bottom-8 w-1.5 rounded-r-full bg-[#002b5c] opacity-20 group-hover:bg-[#002b5c] group-hover:opacity-100 transition-all" />
 
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-6">
-                    <h3 className="text-4xl font-black text-gray-900 tracking-tight leading-tight group-hover:text-[#002b5c] transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight group-hover:text-[#002b5c] transition-colors truncate pr-4">
                       {item.subject}
                     </h3>
-                    <TimeAgo date={item.createdAt} />
+                    <div className="shrink-0">
+                      <TimeAgo date={item.createdAt} />
+                    </div>
                   </div>
 
-                  <p className="text-gray-500 text-2xl leading-relaxed font-medium line-clamp-3">
+                  <p className="text-slate-500 text-lg leading-relaxed font-medium line-clamp-2">
                     {item.message}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center w-20 h-20 bg-gray-50 rounded-full group-hover:bg-[#002b5c] group-hover:text-white transition-all duration-300 shadow-inner">
+                <div className="flex items-center justify-center w-14 h-14 bg-slate-50 rounded-2xl group-hover:bg-[#002b5c] group-hover:text-white transition-all duration-300 shadow-inner">
                   <ChevronRight
-                    size={40}
-                    className="opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
+                    size={28}
+                    className="opacity-20 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
                   />
                 </div>
               </div>
@@ -160,6 +157,15 @@ const Announcements = () => {
           </div>
         )}
       </div>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+          background: rgba(0, 43, 92, 0.1); 
+          border-radius: 10px;
+        }
+      `}</style>
     </div>
   );
 };

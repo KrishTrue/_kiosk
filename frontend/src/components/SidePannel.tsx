@@ -2,7 +2,6 @@ import {
   Search,
   Navigation,
   Calendar,
-  Library,
   Users,
   DoorOpen,
   Bell,
@@ -11,17 +10,19 @@ import {
   Building,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SidePanel = () => {
   const navItems = [
     { key: 'campus', label: 'Campus Map', icon: Building, color: 'bg-[#8dc63f]', route: '/' },
     { key: 'navigate', label: 'Navigate', icon: Navigation, route: '/navigate' },
     { key: 'schedule', label: 'Schedule', icon: Calendar, route: '/schedule' },
-    { key: 'library', label: 'Library', icon: Library, route: '/library' },
     { key: 'faculty', label: 'Faculty', icon: Users, route: '/faculty' },
     { key: 'rooms', label: 'Rooms', icon: DoorOpen, route: '/rooms' },
   ];
 
+  const {t}=useTranslation();
+  
   const getNavLinkClass = (isActive: boolean, activeColor?: string) => {
     const baseClasses =
       'flex items-center gap-5 px-8 py-6 rounded-[32px] transition-all active:scale-95 duration-200 border shadow-sm';
@@ -36,7 +37,7 @@ const SidePanel = () => {
     <div className="w-full h-full bg-white/95 backdrop-blur-xl border-r border-slate-200 p-10 flex flex-col gap-10 select-none rounded-r-[40px] shadow-2xl overflow-y-auto custom-scrollbar">
       <div className="shrink-0">
         <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">
-          Sidebar Panel
+          {t('sidebar.title', 'Sidebar Panel')}
         </h2>
         <div className="relative group">
           <Search
@@ -61,7 +62,7 @@ const SidePanel = () => {
             {({ isActive }) => (
               <>
                 <item.icon size={28} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-xl font-bold tracking-tight">{item.label}</span>
+                <span className="text-xl font-bold tracking-tight">{t(`sidebar.${item.key}`)}</span>
                 {isActive && (
                   <ChevronRight
                     size={24}
@@ -79,7 +80,7 @@ const SidePanel = () => {
           {({ isActive }) => (
             <div className={getNavLinkClass(isActive, 'bg-[#002b5c]')}>
               <Bell size={24} className={isActive ? 'text-white' : 'text-slate-400'} />
-              <span className="text-xl font-bold">Announcements</span>
+              <span className="text-xl font-bold">{t('sidebar.announcements')}</span>
               {isActive && <ChevronRight size={24} className="ml-auto opacity-60" />}
             </div>
           )}
@@ -90,12 +91,12 @@ const SidePanel = () => {
       </div>
 
       <div className="pt-8">
-        <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">Help</h2>
+        <h2 className="text-slate-400 font-black tracking-[0.2em] text-xs mb-5 uppercase">{t('sidebar.help')}</h2>
         <NavLink to="/help">
           {({ isActive }) => (
             <div className={getNavLinkClass(isActive, 'bg-slate-800')}>
               <MessageSquare size={22} className={isActive ? 'text-white' : 'text-blue-500'} />
-              <span className="text-xl font-bold">Contact Support</span>
+              <span className="text-xl font-bold">{t('sidebar.contactSupport')}</span>
               {isActive && <ChevronRight size={24} className="ml-auto opacity-60" />}
             </div>
           )}
