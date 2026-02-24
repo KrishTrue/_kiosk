@@ -9,6 +9,7 @@ import AnnouncementDetail from './pages/AnnouncementDetail';
 import Schedule from './pages/Schedule';
 import Faculty from './pages/Faculty';
 import Rooms from './pages/Rooms';
+import Campus360 from './pages/Campus360';
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         <div className="fixed top-36 left-[430px] right-0 bottom-20 pr-6 z-30">
           <div className="h-full w-full">
             <Routes>
-              <Route path="/" element={<Navigation />} />
+              <Route path="/" element={<Campus360 />} />
+              <Route path="/navigate" element={<Navigation />} />
               <Route path="/announcements" element={<Announcements />} />
               <Route path="/announcement/:id" element={<AnnouncementDetail />} />
               <Route path="/help" element={<HelpDesk />} />

@@ -28,7 +28,7 @@ const AnnouncementDetail = () => {
       .then((res) => setData(res.data.announcement))
       .catch(() => setError('Could not load this announcement.'))
       .finally(() => setLoading(false));
-  }, [id, i18n.language]); // re-fetch when language changes
+  }, [id, i18n.language]); 
 
   if (loading)
     return (

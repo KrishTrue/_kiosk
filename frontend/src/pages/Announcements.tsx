@@ -54,7 +54,7 @@ const Announcements = () => {
     }
   };
 
-  // Re-fetch whenever the active language changes
+
   useEffect(() => {
     fetchAnnouncements();
     const autoRefresh = setInterval(fetchAnnouncements, 300000);
