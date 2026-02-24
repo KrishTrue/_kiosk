@@ -10,8 +10,10 @@ import Schedule from './pages/Schedule';
 import Faculty from './pages/Faculty';
 import Rooms from './pages/Rooms';
 import Campus360 from './pages/Campus360';
+import useInactivityTimer from './hooks/TrackInactivity';
 
 const App = () => {
+  useInactivityTimer(); 
   return (
     <div className="h-screen w-screen overflow-hidden bg-gray-100 flex flex-col">
       <div className="fixed top-0 left-0 w-full z-50">
