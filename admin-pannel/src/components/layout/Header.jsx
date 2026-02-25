@@ -18,7 +18,9 @@ const Navbar = ({ pageTitle, userRole }) => (
       
       <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
         <div className="text-right">
-          <p className="text-sm font-bold text-slate-800">{userRole === 'Superadmin' ? 'Root Admin' : 'Campus Manager'}</p>
+          <p className="text-sm font-bold text-slate-800">
+            {userRole === 'Superadmin' ? 'Root Admin' : userRole === 'Admin' ? 'Campus Manager' : 'Campus User'}
+          </p>
           <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-tighter">{userRole}</p>
         </div>
         <div className="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center font-bold">
