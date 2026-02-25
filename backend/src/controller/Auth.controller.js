@@ -38,7 +38,7 @@ export const createAdmin=async(req,res)=>{
             return res.status(403).json({message:'Only super admin can create admin'});
         }
 
-        const hashPassword=bcrypt.hash(password,10);
+        const hashPassword=await bcrypt.hash(password,10);
 
         const newAdmin=new User({
             userId,
@@ -64,7 +64,7 @@ export const createUser=async(req,res)=>{
             return res.status(403).json({message:'Only admin or super admin can create user'});
         }
 
-        const hashPassword=bcrypt.hash(password,10);
+        const hashPassword=await bcrypt.hash(password,10);
 
         const newUser=new User({
             userId,
@@ -78,5 +78,35 @@ export const createUser=async(req,res)=>{
         res.status(201).json({message:'User created successfully',user:newUser});
     }catch(err){
         res.status(500).json({message:'Error creating user',error:err.message});
+    }
+}
+
+
+export const login=async(req,res)=>{
+    try{
+        const {userId,password}=req.body;
+
+        if(!userId || !password){
+            return res.status(400).json({message:'User ID and password are required'});
+        }
+
+        const user=await User.findOne({userId});
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+
+        const isMatch=await bcrypt.compare(password,user.password);
+        if(!isMatch){
+            return res.status(400).json({message:'Invalid credentials'});
+        }
+
+        const token=jwt.sign({userId:user.userId,role:user.role},process.env.JWT_SECRET,{expiresIn:'1h'});
+
+        res.cookie('token',token,{httpOnly:true});
+        res.json({message:'Login successful',user:{userId:user.userId,name:user.name,email:user.email,role:user.role}});
+
+    }catch(err){
+            res.status(500).json({message:'Error logging in',error:err.message});
+            console.error('Login error:', err);
     }
 }
