@@ -4,11 +4,15 @@ import kioskRoutes from './routes/Kiosk.routes.js';
 import buildingRoutes from './routes/Building.routes.js';
 import announcementRoutes from './routes/Announcement.routes.js';
 import facultyRoutes from './routes/Faculty.routes.js';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/Auth.routes.js';
 
 const app = express();
 connectDb();
 
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
 app.get('/api', (req, res) => {
   res.send('Hello World');
@@ -17,5 +21,6 @@ app.use('/api/kiosk', kioskRoutes);
 app.use('/api/building', buildingRoutes);
 app.use('/api/announcement', announcementRoutes);
 app.use('/api/faculty', facultyRoutes);
+app.use('/api/auth',authRoutes)
 
 export default app;
