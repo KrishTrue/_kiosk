@@ -9,14 +9,22 @@ import {
 } from 'lucide-react';
 
 const Sidebar = ({ current, setPage, role }) => {
+  // Base menu for all roles
   const menu = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Overview' },
     { id: 'announcements', icon: Megaphone, label: 'Announcements' },
     { id: 'faculty', icon: Users, label: 'Faculty' },
-    { id: 'buildings', icon: Building2, label: 'Buildings' },
-    { id: 'kiosks', icon: Monitor, label: 'Kiosk Monitor' },
   ];
 
+  // Admin and Superadmin can manage buildings and kiosks
+  if (role === 'Admin' || role === 'Superadmin') {
+    menu.push(
+      { id: 'buildings', icon: Building2, label: 'Buildings' },
+      { id: 'kiosks', icon: Monitor, label: 'Kiosk Monitor' }
+    );
+  }
+
+  // Only Superadmin gets global settings
   if (role === 'Superadmin') {
     menu.push({ id: 'settings', icon: Globe, label: 'Global Settings' });
   }

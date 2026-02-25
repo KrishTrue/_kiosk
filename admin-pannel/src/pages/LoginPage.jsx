@@ -1,18 +1,30 @@
 import { useState } from 'react';
 import { Monitor } from 'lucide-react';
 import { Card, Button, Input } from '../components/ui';
+import bgImage from '../assets/image.png';
 
 const LoginPage = ({ onLogin }) => {
-  const [role, setRole] = useState('Admin');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // TODO: Replace with actual API call to validate credentials and get role
+    // For now, mock role based on userId
+    let role = 'User';
+    if (userId.includes('superadmin')) role = 'Superadmin';
+    else if (userId.includes('admin')) role = 'Admin';
+    
     onLogin(role);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <Card className="max-w-md w-full p-8 space-y-8">
+    <div 
+      className="min-h-screen flex items-center justify-center p-6 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+      <Card className="max-w-md w-full p-8 space-y-8 relative z-10">
         <div className="text-center space-y-2">
           <div className="inline-flex p-3 bg-indigo-100 text-indigo-600 rounded-2xl mb-4">
             <Monitor size={32} />
@@ -23,37 +35,21 @@ const LoginPage = ({ onLogin }) => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <Input 
-            label="Email Address" 
-            type="email" 
-            placeholder="admin@campus.edu" 
-            defaultValue="admin@campus.edu" 
+            label="User ID" 
+            type="text" 
+            placeholder="Enter your user ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            required
           />
           <Input 
             label="Password" 
             type="password" 
-            placeholder="••••••••" 
-            defaultValue="password" 
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700">Access Role</label>
-            <div className="grid grid-cols-2 gap-3">
-              {['Admin', 'Superadmin'].map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setRole(r)}
-                  className={`py-2 px-4 rounded-lg border text-sm font-medium transition-all ${
-                    role === r 
-                      ? 'bg-indigo-50 border-indigo-500 text-indigo-700' 
-                      : 'border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
-          </div>
 
           <Button className="w-full mt-4 py-3">Login to Dashboard</Button>
         </form>
