@@ -18,30 +18,43 @@ import { Toaster } from 'react-hot-toast'
 import Notifications from './pages/Notifications'
 import Notification from './pages/Notification'
 
+
+import { Navigate, Outlet } from 'react-router-dom'
+
+const ProtectedRoute = ({ user, children }) => {
+  const location = useLocation();
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  return children ? children : <Outlet />;
+};
+
 const App = () => {
-  const location=useLocation()
-  const {user}=useContext(authContext)
-  console.log(user)
-  
+  const location = useLocation();
+  const { user } = useContext(authContext);
+
   return (
     <div className=''>
-      {location.pathname !== "/login" && <Navbar/>}
-      {location.pathname !== "/login" && <SideBar/>}
+      {location.pathname !== "/login" && <Navbar />}
+      {location.pathname !== "/login" && <SideBar />}
       <Routes>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/' element={user && user.role === 'superAdmin' ? <SuperAdminDashboard/> : user && user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
-        <Route path='/create-admin' element={<CreateAdmin/>}/>
-        <Route path='/create-user' element={<CreateUser/>}/>
-        <Route path='/create-notifications' element={<CreateNotifications/>}/>
-        <Route path='/faculty' element={<Faculty/>}/>
-        <Route path='/help-requests' element={<HelpRequests/>}/>
-        <Route path='/notifications' element={<Notifications/>}/>
-        <Route path='/notification/:id' element={<Notification/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route element={<ProtectedRoute user={user} />}>
+          <Route path="/dashboard" element={user && user.role === 'superAdmin' ? <SuperAdminDashboard /> : user && user.role === 'admin' ? <AdminDashboard /> : <UserDashboard />} />
+          <Route path="/create-admin" element={<CreateAdmin />} />
+          <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/create-notifications" element={<CreateNotifications />} />
+          <Route path="/faculty" element={<Faculty />} />
+          <Route path="/help-requests" element={<HelpRequests />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/notification/:id" element={<Notification />} />
+        </Route>
       </Routes>
-      {location.pathname !== "/login" && <Footer/>}
-      <Toaster position='bottom-right'/>
+      {location.pathname !== "/login" && <Footer />}
+      <Toaster position='bottom-right' />
     </div>
-  )
+  );
 }
 
 export default App

@@ -13,7 +13,15 @@ import { authContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { user, setuser,navigate } = useContext(authContext);
+  const { user, setuser, navigate } = useContext(authContext);
+
+  React.useEffect(() => {
+    if (user) {
+      if (user.role === 'superAdmin') navigate('/dashboard');
+      else if (user.role === 'admin') navigate('/dashboard');
+      else navigate('/dashboard');
+    }
+  }, [user]);
 
   const [bgIndex, setBgIndex] = useState(0);
   const images = [
@@ -58,7 +66,7 @@ const Login = () => {
       const response = await axios.post('/api/auth/login', formData);
       setuser(response.data.user);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/')
+      navigate('/dashboard')
       toast.success(`Welcome back, ${response.data.user.role || 'Admin'}!`);
       console.log("Login Success:", response.data.user);
     } catch (err) {

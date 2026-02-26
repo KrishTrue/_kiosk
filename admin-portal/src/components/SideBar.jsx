@@ -16,7 +16,7 @@ import { authContext } from '../context/AuthContext';
 
 const SideBar = () => {
   const menuItems = [
-    { label: 'Dashboard', icon: LayoutDashboard, route: '/' },
+    { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard' },
     { label: 'Faculty', icon: Users, route: '/faculty' },
     { label: 'Notifications', icon: Bell, route: '/notifications' },
     { label: 'Help Tickets', icon: Ticket, route: '/admin/tickets' },
@@ -37,6 +37,7 @@ const SideBar = () => {
       const res=await axios.get('/api/auth/logout')
       console.log(res.data)
       setuser(null)
+      localStorage.removeItem('user')
       navigate('/login')
     }catch(err){
       console.log(err)
