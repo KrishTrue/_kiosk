@@ -18,7 +18,7 @@ const SideBar = () => {
   const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/' },
     { label: 'Faculty', icon: Users, route: '/faculty' },
-    { label: 'Notifications', icon: Bell, route: '/admin/notifications' },
+    { label: 'Notifications', icon: Bell, route: '/notifications' },
     { label: 'Help Tickets', icon: Ticket, route: '/admin/tickets' },
   ];
   const {user,setuser,navigate}=useContext(authContext)

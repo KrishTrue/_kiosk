@@ -15,6 +15,8 @@ import Faculty from './pages/Faculty'
 import HelpRequests from './pages/HelpRequests'
 import { authContext } from './context/AuthContext'
 import { Toaster } from 'react-hot-toast'
+import Notifications from './pages/Notifications'
+import Notification from './pages/Notification'
 
 const App = () => {
   const location=useLocation()
@@ -33,6 +35,8 @@ const App = () => {
         <Route path='/create-notifications' element={<CreateNotifications/>}/>
         <Route path='/faculty' element={<Faculty/>}/>
         <Route path='/help-requests' element={<HelpRequests/>}/>
+        <Route path='/notifications' element={<Notifications/>}/>
+        <Route path='/notification/:id' element={<Notification/>}/>
       </Routes>
       {location.pathname !== "/login" && <Footer/>}
       <Toaster position='bottom-right'/>
