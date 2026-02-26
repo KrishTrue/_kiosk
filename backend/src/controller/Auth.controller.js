@@ -30,12 +30,16 @@ export const registerSuperAdmin=async(req,res)=>{
 }
 
 
-export const createAdmin=async(req,res)=>{
+export const createUserByAdmins=async(req,res)=>{
     try{
-        const {userId,name,email,password}=req.body;
+        const {userId,name,email,password,role}=req.body;
 
-        if(req.user.role!=='superAdmin'){
+        if(role==='admin' && req.user.role!=='superAdmin'){
             return res.status(403).json({message:'Only super admin can create admin'});
+        }
+
+        if(role==='user' && req.user.role!=='admin' && req.user.role!=='superAdmin'){
+            return res.status(403).json({message:'Only admin or super admin can create user'});
         }
 
         const hashPassword=await bcrypt.hash(password,10);
@@ -45,39 +49,13 @@ export const createAdmin=async(req,res)=>{
             name,
             email,
             password:hashPassword,
-            role:'admin'
+            role
         });
 
         await newAdmin.save();
         res.status(201).json({message:'Admin created successfully',admin:newAdmin});
     }catch(err){
         res.status(500).json({message:'Error creating admin',error:err.message});
-    }
-}
-
-
-export const createUser=async(req,res)=>{
-    try{
-        const {userId,name,email,password}=req.body;
-
-        if(req.user.role!=='admin' && req.user.role!=='superAdmin'){
-            return res.status(403).json({message:'Only admin or super admin can create user'});
-        }
-
-        const hashPassword=await bcrypt.hash(password,10);
-
-        const newUser=new User({
-            userId,
-            name,
-            email,
-            password:hashPassword,
-            role:'user'
-        });
-
-        await newUser.save();
-        res.status(201).json({message:'User created successfully',user:newUser});
-    }catch(err){
-        res.status(500).json({message:'Error creating user',error:err.message});
     }
 }
 
@@ -108,5 +86,72 @@ export const login=async(req,res)=>{
     }catch(err){
             res.status(500).json({message:'Error logging in',error:err.message});
             console.error('Login error:', err);
+    }
+}
+
+
+export const logout=async(req,res)=>{
+    try{
+        const token=req.cookies.token;  
+        if(!token){
+            return res.status(400).json({message:'Unauthorized !! No token provided'});
+        }
+        res.clearCookie('token');
+        res.json({message:'Logout successful'});
+    }catch(err){
+        res.status(500).json({message:'Error logging out',error:err.message});
+        console.error('Logout error:', err);
+    }
+}
+
+
+export const getProfile=async(req,res)=>{
+    try{
+        const userId=req.user.userId;
+        const user=await User.findOne({userId}).select('-password');
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        res.json({profile:user});
+    }catch(err){
+        res.status(500).json({message:'Error fetching profile',error:err.message});
+        console.error('Get profile error:', err);
+    }
+}
+
+export const getAllUsers=async(req,res)=>{
+    try{
+        if(req.user.role!=='admin' && req.user.role!=='superAdmin'){
+            return res.status(403).json({message:'Only admin or super admin can access this resource'});
+        }
+        const users=await User.find().select('-password');
+        res.json({users});
+    }catch(err){
+        res.status(500).json({message:'Error fetching users',error:err.message});
+        console.error('Get all users error:', err);
+    }
+}
+
+
+export const deleteUser=async(req,res)=>{
+    try{
+        const {userId}=req.params;
+
+        if(req.user.role!=='admin' && req.user.role!=='superAdmin'){
+            return res.status(403).json({message:'Only admin or super admin can delete user'});
+        }
+
+        const user=await User.findOneAndDelete({userId});
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        if(user.role==='admin' && req.user.role!=='superAdmin'){
+            return res.status(403).json({message:'Only super admin can delete admin'});
+        }
+        user.remove();
+        res.json({message:'User deleted successfully'});
+    }catch(err){
+        res.status(500).json({message:'Error deleting user',error:err.message});
+        console.error('Delete user error:', err);
     }
 }

@@ -22,12 +22,12 @@ const App = () => {
   console.log(user)
   
   return (
-    <div className='bg-red-400'>
+    <div className=''>
       {location.pathname !== "/login" && <Navbar/>}
       {location.pathname !== "/login" && <SideBar/>}
       <Routes>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/' element={user.role === 'superadmin' ? <SuperAdminDashboard/> : user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
+        <Route path='/' element={user.role === 'superAdmin' ? <SuperAdminDashboard/> : user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
         <Route path='/create-admin' element={<CreateAdmin/>}/>
         <Route path='/create-user' element={<CreateUser/>}/>
         <Route path='/create-notifications' element={<CreateNotifications/>}/>
