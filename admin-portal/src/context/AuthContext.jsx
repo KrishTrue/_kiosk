@@ -6,7 +6,7 @@ const authContext=createContext();
 
 
 const AuthProvider=({children})=>{
-    const [user, setuser] = useState(null)
+    const [user, setuser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
     const navigate=useNavigate()
     const value={
         user,

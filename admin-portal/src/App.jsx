@@ -14,6 +14,7 @@ import CreateNotifications from './pages/CreateNotifications'
 import Faculty from './pages/Faculty'
 import HelpRequests from './pages/HelpRequests'
 import { authContext } from './context/AuthContext'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   const location=useLocation()
@@ -26,9 +27,7 @@ const App = () => {
       {location.pathname !== "/login" && <SideBar/>}
       <Routes>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/super-admin-dashboard' element={<SuperAdminDashboard/>}/>
-        <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
-        <Route path='/user-dashboard' element={<UserDashboard/>}/>
+        <Route path='/' element={user.role === 'superadmin' ? <SuperAdminDashboard/> : user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
         <Route path='/create-admin' element={<CreateAdmin/>}/>
         <Route path='/create-user' element={<CreateUser/>}/>
         <Route path='/create-notifications' element={<CreateNotifications/>}/>
@@ -36,6 +35,7 @@ const App = () => {
         <Route path='/help-requests' element={<HelpRequests/>}/>
       </Routes>
       {location.pathname !== "/login" && <Footer/>}
+      <Toaster position='bottom-right'/>
     </div>
   )
 }
