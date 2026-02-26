@@ -27,7 +27,7 @@ const App = () => {
       {location.pathname !== "/login" && <SideBar/>}
       <Routes>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/' element={user.role === 'superAdmin' ? <SuperAdminDashboard/> : user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
+        <Route path='/' element={user && user.role === 'superAdmin' ? <SuperAdminDashboard/> : user && user.role === 'admin' ? <AdminDashboard/> : <UserDashboard/>}/>
         <Route path='/create-admin' element={<CreateAdmin/>}/>
         <Route path='/create-user' element={<CreateUser/>}/>
         <Route path='/create-notifications' element={<CreateNotifications/>}/>

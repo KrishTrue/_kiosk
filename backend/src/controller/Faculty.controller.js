@@ -60,3 +60,18 @@ export const getFacultyById = async (req, res) => {
     console.log(err);
   }
 };
+
+
+export const deleteFaculty=async(req,res)=>{
+  try{
+    const { id } = req.params;
+    const deletedFaculty = await Faculty.findByIdAndDelete(id);
+    if (!deletedFaculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+    res.status(200).json({ message: 'Faculty deleted successfully' });
+  }catch(err){
+    res.status(500).json({ message: err.message });
+    console.log(err);
+  }
+}

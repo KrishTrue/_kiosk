@@ -7,16 +7,18 @@ import {
 } from 'lucide-react';
 import { useContext } from 'react';
 import { authContext } from '../context/AuthContext';
+import axios from 'axios';
 
 const Navbar = () => {
   const [time, setTime] = useState(new Date());
-  const {user}=useContext(authContext)
+  const {user,navigate,setuser}=useContext(authContext)
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
+ 
   return (
     <nav className="fixed top-0 left-72 right-0 h-24 bg-[#002b5c] px-10 grid grid-cols-3 items-center z-40 shadow-[0_10px_40px_rgba(0,0,0,0.1)] border-b border-white/5 font-sans">
       <div className="flex items-center gap-8 justify-self-start">
@@ -56,7 +58,7 @@ const Navbar = () => {
 
         <button className="flex items-center gap-4 group active:scale-95 transition-all outline-none">
           <div className="flex flex-col items-end hidden sm:flex">
-            <span className="text-sm font-black text-white tracking-tight leading-none mb-1 group-hover:text-blue-400 transition-colors">{user.role}</span>
+            <span className="text-sm font-black text-white tracking-tight leading-none mb-1 group-hover:text-blue-400 transition-colors">{user ? user.role : ''}</span>
             <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest leading-none">Management</span>
           </div>
           <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white shadow-xl group-hover:border-white/40 transition-all overflow-hidden relative">

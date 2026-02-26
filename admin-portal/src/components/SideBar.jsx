@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -10,6 +10,8 @@ import {
   ChevronRight,
   Settings
 } from 'lucide-react';
+import axios from 'axios';
+import { authContext } from '../context/AuthContext';
 
 
 const SideBar = () => {
@@ -19,6 +21,7 @@ const SideBar = () => {
     { label: 'Notifications', icon: Bell, route: '/admin/notifications' },
     { label: 'Help Tickets', icon: Ticket, route: '/admin/tickets' },
   ];
+  const {user,setuser,navigate}=useContext(authContext)
 
   
   const getNavLinkClass = (isActive) => {
@@ -28,6 +31,17 @@ const SideBar = () => {
       : "text-white/60 hover:text-white hover:bg-white/5";
     return `${base} ${active}`;
   };
+
+   const handleLogout=async()=>{
+    try{
+      const res=await axios.get('/api/auth/logout')
+      console.log(res.data)
+      setuser(null)
+      navigate('/login')
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-72 bg-[#002b5c] flex flex-col z-50 shadow-[10px_0_40px_rgba(0,0,0,0.1)] border-r border-white/5 font-sans">
@@ -91,7 +105,7 @@ const SideBar = () => {
           </div>
         </div>
 
-        <button className="w-full flex items-center justify-center gap-3 py-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-2xl transition-all font-black text-xs uppercase tracking-widest active:scale-95 group">
+        <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 py-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-2xl transition-all font-black text-xs uppercase tracking-widest active:scale-95 group">
           <LogOut size={16} className="group-hover:-translate-x-1 transition-transform" />
           Logout Session
         </button>
