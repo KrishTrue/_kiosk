@@ -4,11 +4,11 @@ import HelpTicket from "../models/HelpTicket.model.js"
 
 export const createHelpTicket=async(req,res)=>{
     try{
-        const {subject,description}=req.body
+        const {subject,description,category}=req.body
         if(!subject || !description){
             return res.status(400).json({message:"Subject and Description are required"})
         }
-        const newTicket=new HelpTicket({subject,description})
+        const newTicket=new HelpTicket({subject,description,category})
         await newTicket.save()
         return res.status(201).json({message:"Help Ticket Created Successfully",ticket:newTicket})
     }catch(err){

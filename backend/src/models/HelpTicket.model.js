@@ -9,6 +9,11 @@ const helpTicketSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	category:{
+		type:String,
+		enum:['software','hardware','network','other'],
+		default:'other'
+	},
 	status: {
 		type: String,
 		enum: ['open', 'in-progress', 'resolved', 'closed'],
