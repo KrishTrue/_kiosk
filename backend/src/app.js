@@ -6,6 +6,7 @@ import announcementRoutes from './routes/Announcement.routes.js';
 import facultyRoutes from './routes/Faculty.routes.js';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/Auth.routes.js';
+import helpTicketRoutes from './routes/HelpTicket.routes.js';
 
 const app = express();
 connectDb();
@@ -22,5 +23,6 @@ app.use('/api/building', buildingRoutes);
 app.use('/api/announcement', announcementRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/auth',authRoutes)
+app.use('/api/help-ticket', helpTicketRoutes);
 
 export default app;
