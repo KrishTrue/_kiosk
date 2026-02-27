@@ -19,7 +19,7 @@ const SideBar = () => {
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard' },
     { label: 'Faculty', icon: Users, route: '/faculty' },
     { label: 'Notifications', icon: Bell, route: '/notifications' },
-    { label: 'Help Tickets', icon: Ticket, route: '/admin/tickets' },
+    { label: 'Help Tickets', icon: Ticket, route: '/help-requests' },
   ];
   const {user,setuser,navigate}=useContext(authContext)
 
@@ -85,7 +85,7 @@ const SideBar = () => {
         <div className="mt-8">
           <p className="px-6 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">System</p>
           <NavLink 
-            to="/admin/settings"
+            to="/settings"
             className={({ isActive }) => getNavLinkClass(isActive)}
           >
             <Settings size={22} className="opacity-40" />

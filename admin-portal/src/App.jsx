@@ -17,9 +17,9 @@ import { authContext } from './context/AuthContext'
 import { Toaster } from 'react-hot-toast'
 import Notifications from './pages/Notifications'
 import Notification from './pages/Notification'
-
-
 import { Navigate, Outlet } from 'react-router-dom'
+import Settings from './pages/Settings'
+import Ticket from './pages/Ticket'
 
 const ProtectedRoute = ({ user, children }) => {
   const location = useLocation();
@@ -49,6 +49,8 @@ const App = () => {
           <Route path="/help-requests" element={<HelpRequests />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/notification/:id" element={<Notification />} />
+          <Route path='/settings' element={<Settings/>}/>
+          <Route path='/ticket/:id' element={<Ticket/>}/>
         </Route>
       </Routes>
       {location.pathname !== "/login" && <Footer />}

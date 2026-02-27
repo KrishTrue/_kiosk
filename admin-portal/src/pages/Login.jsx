@@ -89,14 +89,14 @@ const Login = () => {
             style={{ backgroundImage: `url(${img})` }}
           />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#001f3f] via-transparent to-[#001f3f]/50 z-[1]" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#001f3f] via-transparent to-[#001f3f]/50 z-1" />
       </div>
 
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] z-[2] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[100px] z-[2] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-5%] w-125 h-125 bg-blue-500/20 rounded-full blur-[120px] z-2 pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-100 h-100 bg-blue-400/10 rounded-full blur-[100px] z-2 pointer-events-none" />
 
 
-      <div className="w-full max-w-[500px] bg-white rounded-[40px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white relative z-10 overflow-hidden">
+      <div className="w-full max-w-125 bg-white rounded-[40px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white relative z-10 overflow-hidden">
         <div className="bg-[#002b5c] p-12 text-center relative overflow-hidden">
           <div className="relative z-10 flex flex-col items-center">
             <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center mb-6 border border-white/20">
@@ -105,7 +105,7 @@ const Login = () => {
             <h1 className="text-3xl font-black text-white tracking-tight">Admin Console</h1>
             <p className="text-blue-200/60 font-bold text-xs uppercase tracking-[0.3em] mt-2">Access Portal</p>
           </div>
-          <ShieldCheck size={200} className="absolute bottom-[-50px] right-[-50px] text-white/5 rotate-12" />
+          <ShieldCheck size={200} className="absolute -bottom-12.5 -right-12.5 text-white/5 rotate-12" />
         </div>
 
         <form onSubmit={handleLogin} className="p-10 lg:p-14 space-y-8">

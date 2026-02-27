@@ -72,7 +72,7 @@ export const deleteHelpTicket=async(req,res)=>{
         if(!ticket){
             return res.status(404).json({message:"Help Ticket Not Found"})
         }
-        await ticket.remove()
+        await HelpTicket.deleteOne({_id: id});
         return res.status(200).json({message:"Help Ticket Deleted"})
     }catch(err){
         console.log(err)

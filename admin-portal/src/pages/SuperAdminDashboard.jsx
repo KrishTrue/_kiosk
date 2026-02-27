@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import axios from 'axios';
 import { 
   ShieldCheck, 
@@ -16,8 +16,12 @@ import {
   CheckCircle2,
   Fingerprint,
   UserCheck,
-  MoreVertical
+  MoreVertical,
+  BadgeCheck,
+  IdCard
 } from 'lucide-react';
+import { authContext } from '../context/AuthContext';
+
 
 const SuperAdminDashboard = () => {
   const [allUsers, setAllUsers] = useState([]);
@@ -25,6 +29,7 @@ const SuperAdminDashboard = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const {user}=useContext(authContext)
 
   const [newUser, setNewUser] = useState({
     name: '',
@@ -38,10 +43,15 @@ const SuperAdminDashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const usersRes = await axios.get('/api/auth/all-users');
+      const [profileRes, usersRes] = await Promise.all([
+        axios.get('/api/auth/user-info'),
+        axios.get('/api/auth/all-users')
+      ]);
+      
+      setProfile(profileRes.data.user || profileRes.data);
       setAllUsers(usersRes.data.users || usersRes.data);
     } catch (err) {
-      console.error("Sync Error:", err);
+      console.error("Dashboard Sync Error:", err);
       setError("Administrative database connection timed out.");
     } finally {
       setLoading(false);
@@ -80,7 +90,6 @@ const SuperAdminDashboard = () => {
     }
   };
 
-
   const filteredUsers = useMemo(() => {
     return allUsers.filter(u => 
       u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -91,8 +100,8 @@ const SuperAdminDashboard = () => {
 
   const stats = useMemo(() => ({
     total: allUsers.length,
-    admins: allUsers.filter(u => u.role === 'Admin').length,
-    users: allUsers.filter(u => u.role === 'User').length,
+    admins: allUsers.filter(u => u.role?.toLowerCase() === 'admin').length,
+    users: allUsers.filter(u => u.role?.toLowerCase() === 'user').length,
   }), [allUsers]);
 
   if (loading) return (
@@ -103,7 +112,7 @@ const SuperAdminDashboard = () => {
           <ShieldCheck size={20} className="text-[#002b5c]" />
         </div>
       </div>
-      <span className="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] animate-pulse">Synchronizing Secure Directory</span>
+      <span className="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] animate-pulse">Establishing Secure Session</span>
     </div>
   );
 
@@ -111,33 +120,79 @@ const SuperAdminDashboard = () => {
     <div className="ml-72 mt-24 h-[calc(100vh-6rem)] flex flex-col font-sans bg-[#f4f7fa] overflow-hidden">
       
       <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+      
+        <header className="mb-10 bg-[#002b5c] rounded-[48px] p-10 shadow-2xl shadow-blue-900/20 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+            <ShieldCheck size={240} className="rotate-12" />
+          </div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="flex items-center gap-8">
+              <div className="w-24 h-24 bg-white/10 backdrop-blur-md border border-white/20 rounded-4xl flex items-center justify-center text-white shadow-inner">
+                <UserIcon size={44} strokeWidth={1.5} />
+              </div>
+              <div className="text-white">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="bg-blue-500 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full shadow-lg shadow-blue-500/20">
+                    Active Session
+                  </span>
+                  <div className="flex items-center gap-1 text-blue-300">
+                    <BadgeCheck size={14} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Authenticated Admin</span>
+                  </div>
+                </div>
+                <h1 className="text-4xl font-black tracking-tight leading-none mb-2 italic">
+                  {user?.name || "Administrator"}
+                </h1>
+                <div className="flex flex-wrap items-center gap-6 opacity-60">
+                  <div className="flex items-center gap-2">
+                    <Mail size={14} />
+                    <span className="text-sm font-medium">{user?.email || "N/A"}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <IdCard size={14} />
+                    <span className="text-sm font-medium uppercase tracking-tighter">UID: {user?.userId || "N/A"}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="bg-white/5 border border-white/10 backdrop-blur-sm px-8 py-5 rounded-3xl text-center">
+                <p className="text-[10px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Privilege Level</p>
+                <p className="text-xl font-black text-white uppercase italic">Superuser</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
         <section className="shrink-0 grid grid-cols-4 gap-8 mb-10">
           {[
             { label: 'Total Identities', val: stats.total, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
             { label: 'System Admins', val: stats.admins, icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
             { label: 'Standard Users', val: stats.users, icon: UserCheck, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-            { label: 'Access Status', val: 'Secure', icon: Activity, color: 'text-white', bg: 'bg-[#002b5c]' }
+            { label: 'Network Health', val: 'Optimal', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-50' }
           ].map((s, i) => (
-            <div key={i} className={`${i === 3 ? s.bg : 'bg-white'} p-6 rounded-[32px] shadow-sm border border-white/50 flex items-center gap-6 group transition-all hover:shadow-xl hover:-translate-y-1`}>
-              <div className={`w-14 h-14 ${i === 3 ? 'bg-white/10' : s.bg} ${s.color} rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110`}>
+            <div key={i} className="bg-white p-6 rounded-4xl shadow-sm border border-slate-100 flex items-center gap-6 group transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className={`w-14 h-14 ${s.bg} ${s.color} rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110`}>
                 <s.icon size={28} />
               </div>
               <div>
-                <p className={`text-[9px] font-black uppercase tracking-[0.2em] mb-1 ${i === 3 ? 'text-white/40' : 'text-slate-400'}`}>{s.label}</p>
-                <p className={`text-3xl font-black ${i === 3 ? 'text-white' : 'text-[#002b5c]'} tracking-tight`}>{s.val}</p>
+                <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-1">{s.label}</p>
+                <p className="text-3xl font-black text-[#002b5c] tracking-tight">{s.val}</p>
               </div>
             </div>
           ))}
         </section>
 
-        <div className="flex gap-10 min-h-[600px]">
-          <aside className="w-[440px] bg-white rounded-[44px] shadow-2xl shadow-slate-200/50 border border-white flex flex-col h-fit sticky top-0">
+        <div className="flex gap-10 min-h-150">
+          <aside className="w-110 bg-white rounded-4xl shadow-2xl shadow-slate-200/50 border border-white flex flex-col h-fit sticky top-0">
             <div className="p-10 border-b border-slate-50">
                <div className="flex items-center gap-3 mb-2">
                  <UserPlus className="text-blue-500" size={20} />
                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Provisioning Engine</span>
                </div>
-               <h2 className="text-2xl font-black text-[#002b5c] tracking-tight">Register Identity</h2>
+               <h2 className="text-2xl font-black text-[#002b5c] tracking-tight leading-none uppercase italic">Register Identity</h2>
             </div>
 
             <form onSubmit={handleCreateUser} className="p-10 space-y-8">
@@ -170,7 +225,7 @@ const SuperAdminDashboard = () => {
                     key={r}
                     type="button"
                     onClick={() => setNewUser({...newUser, role: r})}
-                    className={`flex-1 py-3.5 rounded-[18px] font-black text-xs transition-all tracking-[0.2em] border ${
+                    className={`flex-1 py-3.5 rounded-[18px] font-black text-[10px] transition-all tracking-[0.2em] border ${
                       newUser.role === r 
                         ? 'bg-white text-[#002b5c] border-white shadow-xl shadow-slate-200/50' 
                         : 'text-slate-400 border-transparent hover:text-slate-600'
@@ -184,18 +239,17 @@ const SuperAdminDashboard = () => {
               <button 
                 type="submit"
                 disabled={actionLoading}
-                className="w-full bg-[#002b5c] text-white py-6 rounded-[24px] font-black text-base active:scale-[0.97] disabled:opacity-50 transition-all shadow-2xl shadow-blue-900/20 flex items-center justify-center gap-4 group"
+                className="w-full bg-[#002b5c] text-white py-6 rounded-3xl font-black text-base active:scale-[0.97] disabled:opacity-50 transition-all shadow-2xl shadow-blue-900/20 flex items-center justify-center gap-4 group"
               >
                 {actionLoading ? <Loader2 className="animate-spin" size={20} /> : (
                   <>
-                    <span className="tracking-widest">COMMIT CHANGES</span>
+                    <span className="tracking-widest uppercase">Commit Changes</span>
                     <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
               </button>
             </form>
           </aside>
-
 
           <main className="flex-1 bg-white rounded-[44px] shadow-2xl shadow-slate-200/50 border border-white flex flex-col overflow-hidden relative min-h-fit">
             <header className="px-12 py-10 border-b border-slate-50 flex items-center justify-between shrink-0">
@@ -204,7 +258,7 @@ const SuperAdminDashboard = () => {
                    <Fingerprint size={24} />
                  </div>
                  <div>
-                   <h2 className="text-xl font-black text-[#002b5c] tracking-tight">Master Directory</h2>
+                   <h2 className="text-xl font-black text-[#002b5c] tracking-tight uppercase italic leading-none mb-1">Master Directory</h2>
                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global Identity Repository</p>
                  </div>
               </div>
@@ -223,10 +277,10 @@ const SuperAdminDashboard = () => {
             <div className="flex-1 overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead className="bg-white/95 backdrop-blur-md z-10">
-                  <tr className="border-b border-slate-100">
-                    <th className="px-12 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Identity Profile</th>
-                    <th className="px-10 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Level</th>
-                    <th className="px-10 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Connectivity</th>
+                  <tr className="border-b border-slate-100 text-left">
+                    <th className="px-12 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Identity Profile</th>
+                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Level</th>
+                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Connectivity</th>
                     <th className="px-12 py-6 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Commands</th>
                   </tr>
                 </thead>
@@ -235,8 +289,8 @@ const SuperAdminDashboard = () => {
                     <tr key={user._id} className="group hover:bg-slate-50/50 transition-all">
                       <td className="px-12 py-8">
                         <div className="flex items-center gap-5">
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105 ${user.role === 'Admin' ? 'bg-[#002b5c] text-white shadow-xl shadow-blue-900/10' : 'bg-slate-100 text-slate-400'}`}>
-                            {user.role === 'Admin' ? <ShieldCheck size={24} /> : <UserIcon size={24} />}
+                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105 ${user.role?.toLowerCase() === 'admin' ? 'bg-[#002b5c] text-white shadow-xl shadow-blue-900/10' : 'bg-slate-100 text-slate-400'}`}>
+                            {user.role?.toLowerCase() === 'admin' ? <ShieldCheck size={24} /> : <UserIcon size={24} />}
                           </div>
                           <div>
                             <p className="text-base font-black text-[#002b5c] tracking-tight">{user.name}</p>
@@ -245,8 +299,8 @@ const SuperAdminDashboard = () => {
                         </div>
                       </td>
                       <td className="px-10 py-8">
-                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${user.role === 'Admin' ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400'}`}>
-                          <div className={`w-1.5 h-1.5 rounded-full ${user.role === 'Admin' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
+                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${user.role?.toLowerCase() === 'admin' ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400'}`}>
+                          <div className={`w-1.5 h-1.5 rounded-full ${user.role?.toLowerCase() === 'admin' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
                           {user.role}
                         </div>
                       </td>
@@ -254,7 +308,7 @@ const SuperAdminDashboard = () => {
                         <p className="text-sm font-bold text-slate-600">{user.email}</p>
                       </td>
                       <td className="px-12 py-8 text-right">
-                        <div className="flex items-center justify-end gap-2  transition-opacity">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button 
                             onClick={() => handleDeleteUser(user._id)}
                             className="p-4 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all active:scale-90"
